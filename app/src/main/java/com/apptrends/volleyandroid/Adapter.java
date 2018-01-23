@@ -63,6 +63,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         holder.country.setText(data.getCountry());
         Typeface ralewayRegular = Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Regular.ttf");
         Typeface fontAwsome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
+
         holder.more.setTypeface(fontAwsome);
         holder.more.setText("\uF142");
         holder.more.setOnClickListener(new View.OnClickListener() {
