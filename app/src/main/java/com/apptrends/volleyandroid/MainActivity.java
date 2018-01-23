@@ -51,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
         dataList = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(this);
 
-        LoadData();
-
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -116,5 +114,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, AddProductsActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LoadData();
     }
 }

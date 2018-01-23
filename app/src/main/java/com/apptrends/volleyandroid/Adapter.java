@@ -85,7 +85,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                         if (i == 0) {
                             //
                             progressDialog.show();
-                            StringRequest stringRequest = new StringRequest(Url+data.getId().toString(),
+                            StringRequest stringRequest = new StringRequest(Url + data.getId().toString(),
                                     new Response.Listener<String>() {
                                         @Override
                                         public void onResponse(String ServerResponse) {
@@ -117,7 +117,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
                         }
                         if (i == 1) {
-                            Toast.makeText(context, "Update", Toast.LENGTH_SHORT).show();
+                            Intent update = new Intent(context, AddProductsActivity.class);
+                            update.putExtra("id", data.getId().toString());
+                            update.putExtra("name", data.getName().toString());
+                            update.putExtra("email", data.getEmail().toString());
+                            update.putExtra("gender", data.getGender().toString());
+                            update.putExtra("city", data.getCity().toString());
+                            update.putExtra("country", data.getCountry().toString());
+                            context.startActivity(update);
                         }
                     }
                 });
