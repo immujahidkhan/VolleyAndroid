@@ -24,8 +24,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,6 +60,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final ModelClass data = mList.get(position);
         final String id = mList.get(position).toString();
+        final String Url = "https://volleyandroid.000webhostapp.com/abdulrehmanvolley/delete.php?delete&id=";
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Deleting...");
         holder.name.setText(data.getName());
         holder.email.setText(data.getEmail());
         holder.gender.setText(data.getGender());
@@ -74,9 +81,40 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                 mBuilder.setTitle("Select Options");
                 mBuilder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(DialogInterface dialogInterface, final int i) {
                         if (i == 0) {
-                            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+                            //
+                            progressDialog.show();
+                            StringRequest stringRequest = new StringRequest(Url+data.getId().toString(),
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String ServerResponse) {
+
+                                            // Hiding the progress dialog after all task complete.
+                                            progressDialog.dismiss();
+
+                                            // Showing response message coming from server.
+                                            Toast.makeText(context, ServerResponse, Toast.LENGTH_LONG).show();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError volleyError) {
+
+                                            // Hiding the progress dialog after all task complete.
+                                            progressDialog.dismiss();
+
+                                            // Showing error message if something goes wrong.
+                                            Toast.makeText(context, volleyError.toString(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+                            // Adding request to request queue
+                            RequestQueue requestQueue = Volley.newRequestQueue(context);
+                            requestQueue.add(stringRequest);
+
+                            //
+
                         }
                         if (i == 1) {
                             Toast.makeText(context, "Update", Toast.LENGTH_SHORT).show();
@@ -85,7 +123,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                 });
 
                 android.support.v7.app.AlertDialog dialog = mBuilder.create();
-                dialog.getWindow().setLayout(200,100);
+                dialog.getWindow().setLayout(200, 100);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
 
@@ -114,7 +152,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         View v;
-        TextView name, email, gender, city, country,more;
+        TextView name, email, gender, city, country, more;
 
         public MyViewHolder(View itemView) {
             super(itemView);
